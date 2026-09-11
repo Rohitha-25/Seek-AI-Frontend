@@ -98,6 +98,9 @@ npm install
 npm run dev
 ```
 
+#### Related Repository
+https://github.com/Rohitha-25/Seek-AI-Backend
+
 ### Terminology
 
 <table>
