@@ -51,7 +51,7 @@ export default function Chat({
 
     return (
         <div className="chat-section">
-            <h2>seek about: {selectedDocument.fileName}</h2>
+            <h2>Seek about: {selectedDocument.fileName}</h2>
             
             <div className="message-list">
                 {messages.map((msg, i) => (

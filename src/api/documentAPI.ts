@@ -1,4 +1,16 @@
-const BASE_URL = "https://seek-backend-dcef.onrender.com/api/documents";
+const BASE_URL = "http://localhost:8080/api/documents";
+
+function getAuthHeaders() {
+    const token = localStorage.getItem("seek_token");
+
+    if (!token) {
+        throw new Error("User not authenticated!");
+    }
+
+    return {
+        Authorization: `Bearer ${token}`,
+    };
+}
 
 export async function uploadDocument(file: File) {
     const formData = new FormData();
@@ -6,18 +18,21 @@ export async function uploadDocument(file: File) {
 
     const response = await fetch(`${BASE_URL}/upload`, {
         method: "POST",
+        headers: getAuthHeaders(),
         body: formData,
     });
 
     if (!response.ok) {
         throw new Error("Failed to upload document");
     }
-    
+
     return response.json();
 }
 
 export async function getDocuments() {
-    const response = await fetch(BASE_URL);
+    const response = await fetch(BASE_URL, {
+        headers: getAuthHeaders(),
+    });
 
     if (!response.ok) {
         throw new Error("Failed to fetch documents");
@@ -29,8 +44,11 @@ export async function getDocuments() {
 export async function queryDocument(documentId: number, query: string) {
     const response = await fetch(`${BASE_URL}/${documentId}/query`, {
         method: "POST",
-        headers: {"Content-Type" : "application/json"},
-        body: JSON.stringify({query}),
+        headers: {
+            ...getAuthHeaders(),
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ query }),
     });
 
     if (!response.ok) {
@@ -44,6 +62,7 @@ export async function queryDocument(documentId: number, query: string) {
 export async function deleteDocument(documentId: number) {
     const response = await fetch(`${BASE_URL}/${documentId}`, {
         method: "DELETE",
+        headers: getAuthHeaders(),
     });
 
     if (!response.ok) {
